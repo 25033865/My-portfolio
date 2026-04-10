@@ -51,6 +51,10 @@ body {
     transition: background 0.5s ease;
 }
 
+body.modal-open {
+    overflow: hidden;
+}
+
 header {
     text-align: center;
     margin-bottom: 40px;
@@ -517,6 +521,104 @@ footer {
     border-color: #ffffff;
 }
 
+.calculator-modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.82);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    z-index: 2000;
+}
+
+.calculator-modal.open {
+    display: flex;
+    animation: fadeIn 0.25s ease-out;
+}
+
+.calculator-panel {
+    width: min(420px, 100%);
+    background: #1d1d1d;
+    border: 2px solid #0088ff;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 18px 35px rgba(0, 136, 255, 0.35);
+}
+
+.calculator-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 14px;
+}
+
+.calculator-header h3 {
+    color: #66d9ff;
+    margin: 0;
+    font-size: 1.2rem;
+    letter-spacing: 0.8px;
+}
+
+.calculator-close {
+    background: transparent;
+    border: none;
+    color: #ffffff;
+    font-size: 1.7rem;
+    line-height: 1;
+    padding: 0 4px;
+}
+
+.calculator-display {
+    width: 100%;
+    border: 2px solid #0088ff;
+    border-radius: 8px;
+    background: #0d0d0d;
+    color: #ffffff;
+    font-size: 1.8rem;
+    text-align: right;
+    padding: 12px;
+    margin-bottom: 14px;
+}
+
+.calculator-keys {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 10px;
+}
+
+.calculator-key {
+    border: 1px solid #0066cc;
+    border-radius: 8px;
+    padding: 12px;
+    background: #2b2b2b;
+    color: #ffffff;
+    font-size: 1.05rem;
+    font-weight: 600;
+    transition: transform 0.15s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+
+.calculator-key:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 136, 255, 0.25);
+    background: #363636;
+}
+
+.operator-key {
+    background: #004a91;
+}
+
+.function-key {
+    background: #5a1e1e;
+    border-color: #8a2d2d;
+}
+
+.equal-key {
+    background: linear-gradient(135deg, #0088ff 0%, #66d9ff 100%);
+    color: #000000;
+    border-color: #66d9ff;
+}
+
 .education-item {
     background: #333333;
     padding: 20px;
@@ -760,5 +862,18 @@ nav a:hover:before {
     
     .card-content p {
         font-size: 0.7rem;
+    }
+
+    .calculator-panel {
+        padding: 14px;
+    }
+
+    .calculator-display {
+        font-size: 1.5rem;
+    }
+
+    .calculator-key {
+        padding: 10px;
+        font-size: 1rem;
     }
 }
