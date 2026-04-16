@@ -6,6 +6,7 @@ This is my personal portfolio website created using HTML, CSS, and JavaScript. I
 - HTML
 - CSS
 - JavaScript
+Which are located inside a Public Folder
 
 ## Project Structure 📁
 - `index.html` – main page structure
