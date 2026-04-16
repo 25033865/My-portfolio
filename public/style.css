@@ -103,8 +103,11 @@ header h1 {
     border: 5px solid #0066cc;
     box-shadow: 0 8px 16px rgba(0, 102, 204, 0.3);
     transition: transform 0.3s ease;
-    width: 200px;
-    height: 200px;
+    width: min(220px, 100%);
+    aspect-ratio: 1 / 1;
+    height: auto;
+    object-fit: cover;
+    border-radius: 50%;
 }
 
 .profile-pic img:hover {
@@ -319,7 +322,9 @@ header h1 {
     margin: 6px 0;
     font-size: 0.9rem;
     display: flex;
-    align-items: center;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    line-height: 1.35;
     gap: 8px;
 }
 
@@ -330,17 +335,19 @@ header h1 {
 
 .card-content strong {
     display: inline-block;
-    min-width: 60px;
+    min-width: 66px;
 }
 
 .card-content a {
     color: #66d9ff;
     text-decoration: none;
+    overflow-wrap: anywhere;
+    word-break: break-word;
 }
 
 main {
-    max-width: 100%;
-    width: calc(100% - 40px);
+    max-width: 1200px;
+    width: calc(100% - 32px);
     margin: 0 auto 20px auto;
     background: #1a1a1a;
     padding: 30px;
@@ -438,11 +445,17 @@ footer {
     transform: translateY(-2px);
 }
 
+.skills-container {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 15px;
+}
+
 .skill-category {
     background: #333333;
     padding: 15px;
     border-radius: 8px;
-    margin-bottom: 15px;
+    margin-bottom: 0;
     border-left: 4px solid #0088ff;
     border-right: 3px solid #66d9ff;
     transition: all 0.3s ease;
@@ -834,14 +847,150 @@ nav a:hover:before {
     opacity: 1;
 }
 
+@media (max-width: 1080px) {
+    header {
+        padding: 30px 16px 16px 16px;
+    }
+
+    header .header-row {
+        flex-direction: column;
+        align-items: center;
+        gap: 22px;
+    }
+
+    .profile-column {
+        max-width: 760px;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .bio {
+        max-width: 100%;
+    }
+
+    .card-column {
+        width: 100%;
+        justify-content: center;
+    }
+
+    #business-card-container {
+        margin: 16px auto 0;
+        padding: 0;
+    }
+
+    .business-card {
+        width: min(100%, 560px);
+    }
+
+    .skills-container {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 768px) {
+    nav {
+        margin-bottom: 24px;
+        padding: 12px 10px;
+    }
+
+    nav ul {
+        gap: 10px;
+    }
+
+    nav a {
+        padding: 8px 12px;
+    }
+
+    header h1 {
+        font-size: 2rem;
+    }
+
+    .tagline {
+        font-size: 1.05rem;
+    }
+
+    main {
+        width: calc(100% - 18px);
+        padding: 20px;
+    }
+
+    section {
+        padding: 16px;
+        margin-bottom: 22px;
+    }
+
+    section h2 {
+        font-size: 1.45rem;
+    }
+
+    .business-card {
+        width: 100%;
+    }
+
+    .card-front {
+        padding: 22px;
+    }
+
+    .card-back-content {
+        padding: 18px;
+    }
+
+    .card-header h2 {
+        font-size: 1.35rem;
+    }
+
+    .card-content p {
+        font-size: 0.82rem;
+    }
+
+    .skills-container {
+        grid-template-columns: 1fr;
+    }
+
+    .project-item,
+    .education-item,
+    .experience-item,
+    .skill-category {
+        padding: 16px;
+    }
+
+    .calculator-panel {
+        padding: 16px;
+    }
+
+    .calculator-display {
+        font-size: 1.55rem;
+    }
+}
+
 @media (max-width: 600px) {
+    nav {
+        position: static;
+    }
+
     nav ul {
         flex-direction: column;
-        gap: 10px;
+        align-items: stretch;
+        gap: 8px;
+    }
+
+    nav a {
+        display: block;
+        text-align: center;
     }
     
     header h1 {
-        font-size: 1.8rem;
+        font-size: 1.7rem;
+    }
+
+    .profile-pic img {
+        width: min(180px, 68vw);
+    }
+
+    section {
+        scroll-margin-top: 24px;
     }
     
     .business-card {
@@ -852,16 +1001,29 @@ nav a:hover:before {
     }
     
     .card-front {
-        padding: 20px;
-        height: auto;
+        padding: 16px;
+    }
+
+    .card-back-content {
+        padding: 14px;
+        gap: 6px;
     }
     
     .card-header h2 {
-        font-size: 1.2rem;
+        font-size: 1.15rem;
     }
     
     .card-content p {
-        font-size: 0.7rem;
+        font-size: 0.74rem;
+        gap: 6px;
+    }
+
+    .card-content strong {
+        min-width: 56px;
+    }
+
+    .card-back-logo {
+        font-size: 2.1rem;
     }
 
     .calculator-panel {
@@ -869,11 +1031,100 @@ nav a:hover:before {
     }
 
     .calculator-display {
-        font-size: 1.5rem;
+        font-size: 1.4rem;
     }
 
     .calculator-key {
         padding: 10px;
+        font-size: 0.95rem;
+    }
+}
+
+@media (max-width: 420px) {
+    header {
+        padding: 24px 10px 10px 10px;
+    }
+
+    header h1 {
+        font-size: 1.45rem;
+        margin-bottom: 6px;
+    }
+
+    .tagline {
+        font-size: 0.95rem;
+    }
+
+    .bio {
+        font-size: 0.92rem;
+    }
+
+    main {
+        width: calc(100% - 10px);
+        padding: 14px;
+    }
+
+    section {
+        padding: 12px;
+    }
+
+    section h2 {
+        font-size: 1.2rem;
+    }
+
+    .business-card {
+        aspect-ratio: 16 / 10.5;
+    }
+
+    .card-header h2 {
         font-size: 1rem;
+        letter-spacing: 1px;
+    }
+
+    .card-header p {
+        font-size: 0.7rem;
+    }
+
+    .card-back-content {
+        padding: 10px;
+        gap: 4px;
+    }
+
+    .card-content p {
+        font-size: 0.68rem;
+        margin: 4px 0;
+    }
+
+    .card-content strong {
+        min-width: 48px;
+    }
+
+    .card-flip-hint,
+    .card-back-flip-hint {
+        font-size: 0.55rem;
+    }
+
+    .calculator-header h3 {
+        font-size: 1rem;
+    }
+
+    .calculator-display {
+        font-size: 1.25rem;
+        padding: 10px;
+    }
+
+    .calculator-key {
+        padding: 8px;
+        font-size: 0.9rem;
+    }
+}
+
+@media (hover: none), (pointer: coarse) {
+    * {
+        cursor: auto;
+    }
+
+    .cursor,
+    .cursor-follower {
+        display: none !important;
     }
 }
