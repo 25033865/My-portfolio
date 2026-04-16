@@ -23,10 +23,10 @@ This is my personal portfolio website created using HTML, CSS, and JavaScript. I
 The goal of this portfolio is to highlight my work and create a strong personal brand online.
 
 ## Usage 🚀
-To view the project, open `index.html` in your browser.
+To view the project, open `https://port.mudau.me/` in your browser.
 
 ## Live Website 🔗
-
+https://port.mudau.me/
 
 ## Author 👨‍💻
 **Mudau Rotondwa Agriment**
