@@ -201,4 +201,207 @@ document.addEventListener('DOMContentLoaded', function() {
             this.style.transform = 'translateX(0)';
         });
     });
+
+    const openCalculatorButton = document.getElementById('open-calculator');
+    const calculatorModal = document.getElementById('calculator-modal');
+    const closeCalculatorButton = document.getElementById('close-calculator');
+    const calculatorDisplay = document.getElementById('calculator-display');
+    const calculatorKeys = document.querySelectorAll('.calculator-key');
+
+    if (openCalculatorButton && calculatorModal && closeCalculatorButton && calculatorDisplay) {
+        let expression = '';
+        const operators = new Set(['+', '-', '×', '÷', '*', '/']);
+
+        function updateCalculatorDisplay(value) {
+            calculatorDisplay.value = value || '0';
+        }
+
+        function normalizeExpression(value) {
+            return value.replace(/×/g, '*').replace(/÷/g, '/');
+        }
+
+        function isValidExpression(value) {
+            return /^[0-9+\-*/().\s]+$/.test(value);
+        }
+
+        function clearCalculator() {
+            expression = '';
+            updateCalculatorDisplay('0');
+        }
+
+        function backspaceCalculator() {
+            if (!expression) return;
+            expression = expression.slice(0, -1);
+            updateCalculatorDisplay(expression);
+        }
+
+        function appendCalculatorValue(value) {
+            if (!value) return;
+
+            const lastChar = expression.slice(-1);
+
+            if (value === '.') {
+                const currentNumber = expression.split(/[+\-×÷*/()]/).pop();
+                if (currentNumber.includes('.')) return;
+                if (!currentNumber) {
+                    expression += '0.';
+                    updateCalculatorDisplay(expression);
+                    return;
+                }
+            }
+
+            if (value === '(') {
+                if (expression && /[0-9.)]/.test(lastChar)) {
+                    expression += '×';
+                }
+                expression += value;
+                updateCalculatorDisplay(expression);
+                return;
+            }
+
+            if (value === ')') {
+                const openCount = (expression.match(/\(/g) || []).length;
+                const closeCount = (expression.match(/\)/g) || []).length;
+                if (openCount <= closeCount || !expression || operators.has(lastChar) || lastChar === '(') {
+                    return;
+                }
+                expression += value;
+                updateCalculatorDisplay(expression);
+                return;
+            }
+
+            if (operators.has(value)) {
+                if (!expression) {
+                    if (value === '-') {
+                        expression = value;
+                        updateCalculatorDisplay(expression);
+                    }
+                    return;
+                }
+
+                if (operators.has(lastChar)) {
+                    expression = expression.slice(0, -1) + value;
+                    updateCalculatorDisplay(expression);
+                    return;
+                }
+            }
+
+            expression += value;
+            updateCalculatorDisplay(expression);
+        }
+
+        function evaluateExpression() {
+            if (!expression) return;
+
+            const normalized = normalizeExpression(expression);
+            const openCount = (normalized.match(/\(/g) || []).length;
+            const closeCount = (normalized.match(/\)/g) || []).length;
+
+            if (!isValidExpression(normalized) || openCount !== closeCount) {
+                updateCalculatorDisplay('Error');
+                expression = '';
+                return;
+            }
+
+            try {
+                const result = Function(`"use strict"; return (${normalized});`)();
+                if (!Number.isFinite(result)) {
+                    throw new Error('Invalid result');
+                }
+                expression = Number(result.toPrecision(12)).toString();
+                updateCalculatorDisplay(expression);
+            } catch (error) {
+                updateCalculatorDisplay('Error');
+                expression = '';
+            }
+        }
+
+        function openCalculator() {
+            calculatorModal.classList.add('open');
+            calculatorModal.setAttribute('aria-hidden', 'false');
+            document.body.classList.add('modal-open');
+            updateCalculatorDisplay(expression);
+        }
+
+        function closeCalculator() {
+            calculatorModal.classList.remove('open');
+            calculatorModal.setAttribute('aria-hidden', 'true');
+            document.body.classList.remove('modal-open');
+        }
+
+        openCalculatorButton.addEventListener('click', function(e) {
+            e.preventDefault();
+            openCalculator();
+        });
+
+        closeCalculatorButton.addEventListener('click', function() {
+            closeCalculator();
+        });
+
+        calculatorModal.addEventListener('click', function(e) {
+            if (e.target === calculatorModal) {
+                closeCalculator();
+            }
+        });
+
+        calculatorKeys.forEach((key) => {
+            key.addEventListener('click', function() {
+                const action = this.dataset.action;
+                const value = this.dataset.value;
+
+                if (action === 'clear') {
+                    clearCalculator();
+                    return;
+                }
+
+                if (action === 'backspace') {
+                    backspaceCalculator();
+                    return;
+                }
+
+                if (action === 'equals') {
+                    evaluateExpression();
+                    return;
+                }
+
+                appendCalculatorValue(value);
+            });
+        });
+
+        document.addEventListener('keydown', function(e) {
+            if (!calculatorModal.classList.contains('open')) return;
+
+            if (e.key === 'Escape') {
+                closeCalculator();
+                return;
+            }
+
+            if (e.key === 'Enter' || e.key === '=') {
+                e.preventDefault();
+                evaluateExpression();
+                return;
+            }
+
+            if (e.key === 'Backspace') {
+                e.preventDefault();
+                backspaceCalculator();
+                return;
+            }
+
+            if (e.key === 'Delete') {
+                e.preventDefault();
+                clearCalculator();
+                return;
+            }
+
+            if (/^[0-9.+\-*/()]$/.test(e.key)) {
+                e.preventDefault();
+                const keyMap = {
+                    '*': '×',
+                    '/': '÷'
+                };
+                appendCalculatorValue(keyMap[e.key] || e.key);
+            }
+        });
+    }
 });
